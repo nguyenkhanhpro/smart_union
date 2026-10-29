@@ -1,0 +1,7 @@
+{% macro stat_card(label, value, hint=None, tone='') %}
+<div class="stat-card {{ tone }}">
+  <div class="stat-value">{{ value }}</div>
+  <div class="stat-label">{{ label }}</div>
+  {% if hint %}<div class="stat-hint">{{ hint }}</div>{% endif %}
+</div>
+{% endmacro %}

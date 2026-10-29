@@ -1,0 +1,38 @@
+{% from "components/rank_badge.html" import rank_badge %}
+{% from "components/rank_change.html" import rank_change %}
+{% from "components/empty_state.html" import empty_state %}
+{% macro ranking_table(rows, show_change=True) %}
+{% if rows %}
+<div class="table-responsive">
+  <table class="table table-rank align-middle mb-0">
+    <thead>
+      <tr>
+        <th scope="col" class="col-rank">Hạng</th>
+        <th scope="col">Lớp</th>
+        {% if show_change %}<th scope="col" class="text-center">So với kỳ trước</th>{% endif %}
+        <th scope="col" class="text-end">Điểm cộng</th>
+        <th scope="col" class="text-end">Điểm trừ</th>
+        <th scope="col" class="text-end">Tổng điểm</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+      <tr>
+        <td>{{ rank_badge(r.rank) }}</td>
+        <td>
+          <a class="class-link" href="/classes/{{ r.class_id }}">{{ r.class_name }}</a>
+          {% if r.homeroom_teacher %}<div class="cell-sub">{{ r.homeroom_teacher }}</div>{% endif %}
+        </td>
+        {% if show_change %}<td class="text-center">{{ rank_change(r.change) }}</td>{% endif %}
+        <td class="text-end num text-pos">{{ r.positive|points if r.positive else '0' }}</td>
+        <td class="text-end num text-neg">{{ r.negative|points if r.negative else '0' }}</td>
+        <td class="text-end num fw-semibold">{{ r.total|num }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+{{ empty_state('Chưa có lớp nào', 'Thêm lớp để bắt đầu theo dõi thi đua.', '/classes/new', 'Thêm lớp') }}
+{% endif %}
+{% endmacro %}

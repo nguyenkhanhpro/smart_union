@@ -1,0 +1,3 @@
+{% macro points_badge(value) %}
+<span class="pts {{ 'pts-pos' if value > 0 else ('pts-neg' if value < 0 else 'pts-zero') }}">{{ value|points }}</span>
+{% endmacro %}

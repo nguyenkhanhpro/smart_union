@@ -1,0 +1,8 @@
+@media print {
+  .sidebar, .topbar, .no-print, .btn, .period-filter { display: none !important; }
+  body { background: #fff; }
+  .app-content { padding: 0; max-width: none; }
+  .panel, .stat-card { border-color: #ccc; break-inside: avoid; }
+  .period-label { display: block !important; font-size: 1rem; margin-bottom: 0.5rem; }
+  .table-responsive { overflow: visible; }
+}

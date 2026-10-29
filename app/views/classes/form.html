@@ -1,0 +1,20 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/form_field.html" import input, checkbox, form_actions %}
+{% block title %}{{ 'Sửa lớp' if item else 'Thêm lớp' }}{% endblock %}
+{% block content %}
+{{ page_header('Sửa lớp ' ~ item.name if item else 'Thêm lớp') }}
+<section class="panel form-panel">
+  <form method="post" action="{{ '/classes/' ~ item.id ~ '/edit' if item else '/classes/new' }}" novalidate>
+    <div class="row g-3">
+      <div class="col-md-6">{{ input('Tên lớp', 'name', values.name, required=True, error=errors.name, help='Ví dụ: 6A, 7B') }}</div>
+      <div class="col-md-6">{{ input('Khối', 'grade', values.grade, 'number', required=True, error=errors.grade, attrs='min="1" max="12"') }}</div>
+      <div class="col-md-6">{{ input('Năm học', 'school_year', values.school_year, required=True, error=errors.school_year, help='Ví dụ: 2026-2027') }}</div>
+      <div class="col-md-6">{{ input('Giáo viên phụ trách', 'homeroom_teacher', values.homeroom_teacher) }}</div>
+    </div>
+    {{ input('Ghi chú', 'note', values.note) }}
+    {% if item %}{{ checkbox('Đang hoạt động', 'is_active', values.is_active, 'Bỏ chọn để ẩn lớp khỏi bảng xếp hạng nhưng vẫn giữ lịch sử điểm.') }}{% endif %}
+    {{ form_actions('/classes') }}
+  </form>
+</section>
+{% endblock %}

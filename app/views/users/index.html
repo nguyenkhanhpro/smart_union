@@ -1,0 +1,26 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% block title %}Tài khoản{% endblock %}
+{% block content %}
+{% call page_header('Tài khoản', 'Phân quyền giáo viên và quản trị') %}
+  <a class="btn btn-primary btn-sm" href="/users/new"><i class="bi bi-plus-lg"></i> Thêm tài khoản</a>
+{% endcall %}
+<section class="panel">
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th scope="col">Họ tên</th><th scope="col">Tên đăng nhập</th><th scope="col">Vai trò</th><th scope="col">Trạng thái</th><th scope="col"><span class="visually-hidden">Thao tác</span></th></tr></thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td class="fw-semibold">{{ u.full_name }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.role_label }}</td>
+          <td>{% if u.is_active %}<span class="badge text-bg-success-subtle">Đang hoạt động</span>{% else %}<span class="badge text-bg-secondary-subtle">Đã khóa</span>{% endif %}</td>
+          <td class="text-end"><a class="btn btn-sm btn-outline-secondary" href="/users/{{ u.id }}/edit" title="Sửa"><i class="bi bi-pencil"></i><span class="visually-hidden">Sửa</span></a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

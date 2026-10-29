@@ -1,0 +1,16 @@
+{# Bộ lọc kỳ thi đua dùng chung. extra = tham số ẩn cần giữ lại (ví dụ class_id). #}
+{% macro period_filter(period, action, extra={}) %}
+{% set tail %}{% for k, v in extra.items() %}&{{ k }}={{ v }}{% endfor %}{% endset %}
+<form method="get" action="{{ action }}" class="period-filter no-print" data-auto-submit>
+  {% for k, v in extra.items() %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endfor %}
+  <a class="btn btn-outline-secondary btn-sm" href="{{ action }}?kind={{ period.kind }}&date={{ period.prev_anchor.isoformat() }}{{ tail }}" aria-label="Kỳ trước"><i class="bi bi-chevron-left"></i></a>
+  <select class="form-select form-select-sm" name="kind" aria-label="Loại kỳ">
+    <option value="week" {{ 'selected' if period.kind == 'week' }}>Tuần</option>
+    <option value="month" {{ 'selected' if period.kind == 'month' }}>Tháng</option>
+    <option value="semester" {{ 'selected' if period.kind == 'semester' }}>Học kỳ</option>
+  </select>
+  <input class="form-control form-control-sm" type="date" name="date" value="{{ period.start.isoformat() }}" aria-label="Chọn ngày trong kỳ">
+  <a class="btn btn-outline-secondary btn-sm" href="{{ action }}?kind={{ period.kind }}&date={{ period.next_anchor.isoformat() }}{{ tail }}" aria-label="Kỳ sau"><i class="bi bi-chevron-right"></i></a>
+</form>
+<p class="period-label">{{ period.label }}</p>
+{% endmacro %}

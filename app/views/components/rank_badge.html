@@ -1,0 +1,3 @@
+{% macro rank_badge(rank) %}
+<span class="rank {{ 'rank-' ~ rank if rank <= 3 }}">{{ rank }}</span>
+{% endmacro %}

@@ -1,0 +1,39 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/entries_table.html" import entries_table %}
+{% from "components/pagination.html" import pagination %}
+{% from "components/form_field.html" import select %}
+{% block title %}Chấm điểm{% endblock %}
+{% block content %}
+{% call page_header('Chấm điểm thi đua', total ~ ' lượt chấm') %}
+  <a class="btn btn-primary btn-sm" href="/scores/new"><i class="bi bi-plus-lg"></i> Nhập điểm</a>
+{% endcall %}
+
+<form method="get" action="/scores" class="panel filter-bar no-print" data-auto-submit>
+  <div class="row g-2 align-items-end">
+    <div class="col-6 col-md-3">
+      <label class="form-label small" for="flt-class">Lớp</label>
+      <select class="form-select form-select-sm" id="flt-class" name="class_id">
+        <option value="">Tất cả</option>
+        {% for c in classes %}<option value="{{ c.id }}" {{ 'selected' if filters.class_id == c.id }}>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-3">
+      <label class="form-label small" for="flt-crit">Tiêu chí</label>
+      <select class="form-select form-select-sm" id="flt-crit" name="criterion_id">
+        <option value="">Tất cả</option>
+        {% for c in criteria %}<option value="{{ c.id }}" {{ 'selected' if filters.criterion_id == c.id }}>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-6 col-md-2"><label class="form-label small" for="flt-start">Từ ngày</label><input class="form-control form-control-sm" id="flt-start" type="date" name="start" value="{{ filters.start }}"></div>
+    <div class="col-6 col-md-2"><label class="form-label small" for="flt-end">Đến ngày</label><input class="form-control form-control-sm" id="flt-end" type="date" name="end" value="{{ filters.end }}"></div>
+    <div class="col-12 col-md-2"><a class="btn btn-light btn-sm w-100" href="/scores">Xóa bộ lọc</a></div>
+  </div>
+</form>
+
+<section class="panel">
+  {{ entries_table(entries, show_class=True, can_edit=user.is_admin) }}
+  <div class="panel-foot">{{ pagination(page, pages, qs) }}</div>
+</section>
+{% if not user.is_admin %}<p class="note">Chỉ tài khoản quản trị mới được sửa hoặc xóa lượt chấm. Mọi thay đổi đều được ghi vào lịch sử.</p>{% endif %}
+{% endblock %}

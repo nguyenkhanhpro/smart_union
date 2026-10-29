@@ -1,0 +1,49 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/period_filter.html" import period_filter %}
+{% from "components/stat_card.html" import stat_card %}
+{% from "components/chart_card.html" import chart_card %}
+{% from "components/entries_table.html" import entries_table %}
+{% from "components/rank_change.html" import rank_change %}
+{% from "components/points_badge.html" import points_badge %}
+{% block title %}Lớp {{ item.name }}{% endblock %}
+{% block content %}
+{% call page_header('Lớp ' ~ item.name, 'GVCN: ' ~ (item.homeroom_teacher or 'chưa cập nhật') ~ ', năm học ' ~ item.school_year ~ '. ' ~ period.label) %}
+  {{ period_filter(period, '/classes/' ~ item.id) }}
+  <a class="btn btn-primary btn-sm" href="/scores/new?class_id={{ item.id }}"><i class="bi bi-plus-lg"></i> Chấm điểm lớp này</a>
+{% endcall %}
+
+{% if row %}
+<div class="grid-stats">
+  {{ stat_card('Hạng trong kỳ', row.rank ~ ' / ' ~ class_total, hint='') }}
+  {{ stat_card('Tổng điểm', row.total|num) }}
+  {{ stat_card('Điểm cộng', row.positive|points, tone='pos') }}
+  {{ stat_card('Điểm trừ', row.negative|points, tone='neg') }}
+</div>
+{% endif %}
+
+<div class="grid-2">
+  {{ chart_card('Điểm theo tiêu chí', '/api/dashboard/criteria?kind=' ~ period.kind ~ '&date=' ~ period.start.isoformat() ~ '&class_id=' ~ item.id, 'criteria', hint=period.label) }}
+  <section class="panel">
+    <div class="panel-head"><h2 class="panel-title">Chi tiết theo tiêu chí</h2></div>
+    <div class="table-responsive">
+      <table class="table align-middle mb-0">
+        <thead><tr><th scope="col">Tiêu chí</th><th scope="col" class="text-end">Cộng</th><th scope="col" class="text-end">Trừ</th><th scope="col" class="text-end">Ròng</th></tr></thead>
+        <tbody>
+          {% for b in breakdown %}
+          <tr><td>{{ b.name }}</td>
+            <td class="text-end num text-pos">{{ b.positive|points if b.positive else '0' }}</td>
+            <td class="text-end num text-neg">{{ b.negative|points if b.negative else '0' }}</td>
+            <td class="text-end">{{ points_badge(b.net) }}</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="panel-title">Các lượt chấm trong kỳ</h2></div>
+  {{ entries_table(entries, show_class=False, can_edit=user.is_admin) }}
+</section>
+{% endblock %}

@@ -1,0 +1,5 @@
+{% macro delete_button(action, message, label='Xóa') %}
+<form method="post" action="{{ action }}" class="d-inline" data-confirm="{{ message }}">
+  <button type="submit" class="btn btn-sm btn-outline-danger" title="{{ label }}"><i class="bi bi-trash"></i><span class="visually-hidden">{{ label }}</span></button>
+</form>
+{% endmacro %}

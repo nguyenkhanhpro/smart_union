@@ -1,0 +1,8 @@
+{% macro empty_state(title, text='', action_url=None, action_label=None) %}
+<div class="empty-state">
+  <i class="bi bi-inbox"></i>
+  <h3>{{ title }}</h3>
+  {% if text %}<p>{{ text }}</p>{% endif %}
+  {% if action_url %}<a class="btn btn-primary btn-sm" href="{{ action_url }}">{{ action_label }}</a>{% endif %}
+</div>
+{% endmacro %}

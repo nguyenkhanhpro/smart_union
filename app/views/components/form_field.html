@@ -1,0 +1,46 @@
+{% macro input(label, name, value='', type='text', required=False, help=None, error=None, attrs='') %}
+<div class="mb-3">
+  <label class="form-label" for="f-{{ name }}">{{ label }}{% if required %} <span class="req" aria-hidden="true">*</span>{% endif %}</label>
+  <input class="form-control {{ 'is-invalid' if error }}" id="f-{{ name }}" name="{{ name }}" type="{{ type }}"
+         value="{{ value if value is not none else '' }}" {{ 'required' if required }} {{ attrs|safe }}>
+  {% if error %}<div class="invalid-feedback">{{ error }}</div>{% endif %}
+  {% if help %}<div class="form-text">{{ help }}</div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro select(label, name, options, selected=None, required=False, error=None, placeholder=None) %}
+<div class="mb-3">
+  <label class="form-label" for="f-{{ name }}">{{ label }}{% if required %} <span class="req" aria-hidden="true">*</span>{% endif %}</label>
+  <select class="form-select {{ 'is-invalid' if error }}" id="f-{{ name }}" name="{{ name }}" {{ 'required' if required }}>
+    {% if placeholder %}<option value="">{{ placeholder }}</option>{% endif %}
+    {% for val, text in options %}
+    <option value="{{ val }}" {{ 'selected' if selected is not none and selected|string == val|string }}>{{ text }}</option>
+    {% endfor %}
+  </select>
+  {% if error %}<div class="invalid-feedback">{{ error }}</div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro textarea(label, name, value='', required=False, help=None, error=None, rows=3) %}
+<div class="mb-3">
+  <label class="form-label" for="f-{{ name }}">{{ label }}{% if required %} <span class="req" aria-hidden="true">*</span>{% endif %}</label>
+  <textarea class="form-control {{ 'is-invalid' if error }}" id="f-{{ name }}" name="{{ name }}" rows="{{ rows }}" {{ 'required' if required }}>{{ value if value is not none else '' }}</textarea>
+  {% if error %}<div class="invalid-feedback">{{ error }}</div>{% endif %}
+  {% if help %}<div class="form-text">{{ help }}</div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro checkbox(label, name, checked=False, help=None) %}
+<div class="form-check mb-3">
+  <input class="form-check-input" type="checkbox" id="f-{{ name }}" name="{{ name }}" value="1" {{ 'checked' if checked }}>
+  <label class="form-check-label" for="f-{{ name }}">{{ label }}</label>
+  {% if help %}<div class="form-text">{{ help }}</div>{% endif %}
+</div>
+{% endmacro %}
+
+{% macro form_actions(cancel_url, submit_label='Lưu') %}
+<div class="form-actions">
+  <button type="submit" class="btn btn-primary">{{ submit_label }}</button>
+  <a href="{{ cancel_url }}" class="btn btn-light">Hủy</a>
+</div>
+{% endmacro %}

@@ -1,0 +1,23 @@
+{# Bảng dẫn đầu: hạng 1 nổi bật, hạng 2–3 gọn bên cạnh. #}
+{% macro leaderboard_hero(rows, period_label) %}
+<section class="hero-board" aria-label="Ba lớp dẫn đầu">
+  <div class="hero-lead">
+    <div class="hero-rank">{{ rows[0].rank }}</div>
+    <div>
+      <div class="hero-kicker">Dẫn đầu {{ period_label|lower }}</div>
+      <div class="hero-class">{{ rows[0].class_name }}</div>
+      <div class="hero-points">{{ rows[0].total|num }} điểm</div>
+      {% if rows[0].homeroom_teacher %}<div class="hero-teacher">GVCN {{ rows[0].homeroom_teacher }}</div>{% endif %}
+    </div>
+  </div>
+  <ol class="hero-runners">
+    {% for r in rows[1:] %}
+    <li>
+      <span class="runner-rank">{{ r.rank }}</span>
+      <span class="runner-class">{{ r.class_name }}</span>
+      <span class="runner-points">{{ r.total|num }} điểm</span>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endmacro %}

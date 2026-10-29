@@ -1,0 +1,54 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/period_filter.html" import period_filter %}
+{% from "components/stat_card.html" import stat_card %}
+{% from "components/ranking_table.html" import ranking_table %}
+{% from "components/points_badge.html" import points_badge %}
+{% block title %}Báo cáo{% endblock %}
+{% block content %}
+{% call page_header('Báo cáo tổng kết thi đua', period.label) %}
+  {{ period_filter(period, '/reports') }}
+  <a class="btn btn-outline-secondary btn-sm" href="/reports/export.xlsx?kind={{ period.kind }}&date={{ period.start.isoformat() }}"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</a>
+  <button class="btn btn-outline-secondary btn-sm" type="button" onclick="window.print()"><i class="bi bi-printer"></i> In / Lưu PDF</button>
+{% endcall %}
+
+<div class="grid-stats">
+  {{ stat_card('Lượt chấm điểm', report.total_entries) }}
+  {{ stat_card('Tổng điểm cộng', report.total_positive|points, tone='pos') }}
+  {{ stat_card('Tổng điểm trừ', report.total_negative|points, tone='neg') }}
+  {{ stat_card('Số lớp', report.ranking|length) }}
+</div>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="panel-title">Điểm đáng chú ý</h2></div>
+  {% if report.highlights %}
+  <ul class="highlights">{% for h in report.highlights %}<li>{{ h }}</li>{% endfor %}</ul>
+  {% else %}
+  <p class="text-secondary mb-0">Kỳ này chưa có dữ liệu để tổng hợp.</p>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="panel-title">Bảng xếp hạng</h2></div>
+  {{ ranking_table(report.ranking) }}
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2 class="panel-title">Tổng hợp theo tiêu chí</h2></div>
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th scope="col">Tiêu chí</th><th scope="col" class="text-end">Điểm cộng</th><th scope="col" class="text-end">Điểm trừ</th><th scope="col" class="text-end">Điểm ròng</th><th scope="col" class="text-end">Lượt chấm</th></tr></thead>
+      <tbody>
+        {% for b in report.breakdown %}
+        <tr><td>{{ b.name }}</td>
+          <td class="text-end num text-pos">{{ b.positive|points if b.positive else '0' }}</td>
+          <td class="text-end num text-neg">{{ b.negative|points if b.negative else '0' }}</td>
+          <td class="text-end">{{ points_badge(b.net) }}</td>
+          <td class="text-end num">{{ b.count }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+<p class="note">Báo cáo được tính trực tiếp từ dữ liệu chấm điểm. In hoặc chọn “Lưu thành PDF” trong hộp thoại in của trình duyệt để xuất PDF.</p>
+{% endblock %}

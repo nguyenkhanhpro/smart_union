@@ -1,0 +1,31 @@
+{% from "components/brand.html" import brand %}
+{% set nav = [
+  ('/', 'Tổng quan', 'bi-grid-1x2'),
+  ('/rankings', 'Xếp hạng', 'bi-trophy'),
+  ('/scores', 'Chấm điểm', 'bi-pencil-square'),
+  ('/classes', 'Lớp học', 'bi-people'),
+  ('/criteria', 'Tiêu chí', 'bi-list-check'),
+  ('/reports', 'Báo cáo', 'bi-file-earmark-bar-graph'),
+  ('/history', 'Lịch sử thay đổi', 'bi-clock-history'),
+] %}
+<aside class="sidebar offcanvas-lg offcanvas-start" tabindex="-1" id="sidebar" aria-label="Điều hướng chính">
+  <div class="sidebar-inner">
+    <div class="sidebar-head">
+      {{ brand() }}
+      <button type="button" class="btn-close btn-close-white d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Đóng"></button>
+    </div>
+    <nav class="sidebar-nav">
+      {% for href, label, icon in nav %}
+      <a href="{{ href }}" class="nav-item-link {{ 'active' if (current_path == href or (href != '/' and current_path.startswith(href))) }}">
+        <i class="bi {{ icon }}"></i><span>{{ label }}</span>
+      </a>
+      {% endfor %}
+      {% if user and user.is_admin %}
+      <div class="nav-group">Quản trị</div>
+      <a href="/users" class="nav-item-link {{ 'active' if current_path.startswith('/users') }}">
+        <i class="bi bi-person-gear"></i><span>Tài khoản</span>
+      </a>
+      {% endif %}
+    </nav>
+  </div>
+</aside>

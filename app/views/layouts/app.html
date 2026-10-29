@@ -1,0 +1,21 @@
+{% extends "layouts/base.html" %}
+{% block body %}
+<div class="app-shell">
+  {% include "components/sidebar.html" %}
+  <div class="app-main">
+    {% include "components/topbar.html" %}
+    <main class="app-content">
+      {% include "components/flash.html" %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% include "components/confirm_modal.html" %}
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="/static/js/components/confirm-delete.js"></script>
+<script src="/static/js/components/auto-submit.js"></script>
+<script src="/static/js/components/chart-card.js"></script>
+{% block page_scripts %}{% endblock %}
+{% endblock %}

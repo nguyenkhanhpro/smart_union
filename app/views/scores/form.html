@@ -1,0 +1,39 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/form_field.html" import input, select, textarea, form_actions %}
+{% block title %}{{ 'Sửa lượt chấm' if item else 'Nhập điểm' }}{% endblock %}
+{% block content %}
+{{ page_header('Sửa lượt chấm' if item else 'Nhập điểm thi đua', 'Mỗi lượt chấm cần có lý do; người nhập và thời gian được ghi lại tự động.') }}
+<section class="panel form-panel">
+  <form method="post" action="{{ '/scores/' ~ item.id ~ '/edit' if item else '/scores/new' }}" novalidate>
+    <div class="row g-3">
+      <div class="col-md-6">
+        {{ select('Lớp', 'class_id', class_options, values.class_id, required=True, error=errors.class_id, placeholder='Chọn lớp') }}
+      </div>
+      <div class="col-md-6">
+        {{ select('Tiêu chí', 'criterion_id', criterion_options, values.criterion_id, required=True, error=errors.criterion_id, placeholder='Chọn tiêu chí') }}
+      </div>
+    </div>
+
+    <div class="row g-3">
+      <div class="col-md-6">
+        <fieldset class="mb-3">
+          <legend class="form-label">Loại điểm <span class="req" aria-hidden="true">*</span></legend>
+          <div class="kind-toggle {{ 'is-invalid' if errors.kind }}">
+            <input type="radio" class="btn-check" name="kind" id="kind-add" value="add" {{ 'checked' if values.kind == 'add' }}>
+            <label class="btn btn-outline-success" for="kind-add"><i class="bi bi-plus-lg"></i> Cộng điểm</label>
+            <input type="radio" class="btn-check" name="kind" id="kind-sub" value="sub" {{ 'checked' if values.kind != 'add' }}>
+            <label class="btn btn-outline-danger" for="kind-sub"><i class="bi bi-dash-lg"></i> Trừ điểm</label>
+          </div>
+          {% if errors.kind %}<div class="text-danger small mt-1">{{ errors.kind }}</div>{% endif %}
+        </fieldset>
+      </div>
+      <div class="col-md-3">{{ input('Số điểm', 'amount', values.amount, 'number', required=True, error=errors.amount, attrs='min="0.5" step="0.5"') }}</div>
+      <div class="col-md-3">{{ input('Ngày chấm', 'entry_date', values.entry_date, 'date', required=True, error=errors.entry_date, attrs='max="' ~ today.isoformat() ~ '"') }}</div>
+    </div>
+
+    {{ textarea('Lý do', 'reason', values.reason, required=True, error=errors.reason, help='Ví dụ: Quên khăn quàng khi chào cờ.') }}
+    {{ form_actions('/scores', 'Lưu thay đổi' if item else 'Ghi điểm') }}
+  </form>
+</section>
+{% endblock %}

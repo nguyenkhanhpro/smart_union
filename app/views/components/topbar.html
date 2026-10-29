@@ -1,0 +1,16 @@
+<header class="topbar no-print">
+  <button class="btn btn-light d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-controls="sidebar" aria-label="Mở menu">
+    <i class="bi bi-list"></i>
+  </button>
+  <div class="topbar-spacer"></div>
+  <a href="/scores/new" class="btn btn-primary btn-sm"><i class="bi bi-plus-lg"></i> Nhập điểm</a>
+  <div class="user-chip">
+    <div class="user-meta">
+      <span class="user-name">{{ user.full_name }}</span>
+      <span class="user-role">{{ user.role_label }}</span>
+    </div>
+    <form method="post" action="/logout">
+      <button class="btn btn-outline-secondary btn-sm" type="submit" title="Đăng xuất"><i class="bi bi-box-arrow-right"></i><span class="visually-hidden">Đăng xuất</span></button>
+    </form>
+  </div>
+</header>

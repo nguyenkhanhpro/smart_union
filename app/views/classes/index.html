@@ -1,0 +1,44 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/delete_button.html" import delete_button %}
+{% from "components/empty_state.html" import empty_state %}
+{% block title %}Lớp học{% endblock %}
+{% block content %}
+{% call page_header('Lớp học', 'Danh sách lớp tham gia thi đua') %}
+  {% if user.is_admin %}<a class="btn btn-primary btn-sm" href="/classes/new"><i class="bi bi-plus-lg"></i> Thêm lớp</a>{% endif %}
+{% endcall %}
+<section class="panel">
+  {% if rows %}
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr>
+        <th scope="col">Lớp</th><th scope="col">Khối</th><th scope="col">Năm học</th>
+        <th scope="col">Giáo viên phụ trách</th><th scope="col" class="text-end">Lượt chấm</th>
+        <th scope="col">Trạng thái</th>
+        {% if user.is_admin %}<th scope="col"><span class="visually-hidden">Thao tác</span></th>{% endif %}
+      </tr></thead>
+      <tbody>
+        {% for c, count in rows %}
+        <tr>
+          <td><a class="class-link" href="/classes/{{ c.id }}">{{ c.name }}</a></td>
+          <td>{{ c.grade }}</td>
+          <td>{{ c.school_year }}</td>
+          <td>{{ c.homeroom_teacher or '—' }}</td>
+          <td class="text-end num">{{ count }}</td>
+          <td>{% if c.is_active %}<span class="badge text-bg-success-subtle">Đang hoạt động</span>{% else %}<span class="badge text-bg-secondary-subtle">Đã ẩn</span>{% endif %}</td>
+          {% if user.is_admin %}
+          <td class="text-end text-nowrap">
+            <a class="btn btn-sm btn-outline-secondary" href="/classes/{{ c.id }}/edit" title="Sửa"><i class="bi bi-pencil"></i><span class="visually-hidden">Sửa</span></a>
+            {{ delete_button('/classes/' ~ c.id ~ '/delete', 'Xóa lớp ' ~ c.name ~ '? Chỉ xóa được lớp chưa có điểm.') }}
+          </td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  {{ empty_state('Chưa có lớp nào', 'Thêm lớp đầu tiên để bắt đầu.', '/classes/new' if user.is_admin, 'Thêm lớp') }}
+  {% endif %}
+</section>
+{% endblock %}

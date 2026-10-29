@@ -1,0 +1,40 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/period_filter.html" import period_filter %}
+{% from "components/leaderboard_hero.html" import leaderboard_hero %}
+{% from "components/stat_card.html" import stat_card %}
+{% from "components/chart_card.html" import chart_card %}
+{% from "components/ranking_table.html" import ranking_table %}
+{% from "components/empty_state.html" import empty_state %}
+{% block title %}Tổng quan{% endblock %}
+{% block content %}
+{% call page_header('Tổng quan thi đua', period.label) %}
+  {{ period_filter(period, '/') }}
+{% endcall %}
+
+{% if podium %}
+  {{ leaderboard_hero(podium, period.kind == 'week' and 'tuần này' or period.label) }}
+{% else %}
+  <div class="panel">{{ empty_state('Kỳ này chưa có điểm', 'Nhập điểm cộng/trừ để bảng xếp hạng bắt đầu hiển thị.', '/scores/new', 'Nhập điểm') }}</div>
+{% endif %}
+
+<div class="grid-stats">
+  {{ stat_card('Lớp tham gia', class_count) }}
+  {{ stat_card('Lượt chấm điểm', entries_count) }}
+  {{ stat_card('Tổng điểm cộng', total_positive|points, tone='pos') }}
+  {{ stat_card('Tổng điểm trừ', total_negative|points, tone='neg') }}
+</div>
+
+<div class="grid-2">
+  {{ chart_card('Biến động điểm theo tuần', '/api/dashboard/trend', 'trend', hint='5 lớp có điểm cao nhất, 8 tuần gần đây') }}
+  {{ chart_card('Điểm theo tiêu chí', '/api/dashboard/criteria?kind=' ~ period.kind ~ '&date=' ~ period.start.isoformat(), 'criteria', hint=period.label) }}
+</div>
+
+<section class="panel">
+  <div class="panel-head">
+    <h2 class="panel-title">Bảng xếp hạng đầy đủ</h2>
+    <a href="/rankings?kind={{ period.kind }}&date={{ period.start.isoformat() }}" class="small">Xem trang xếp hạng</a>
+  </div>
+  {{ ranking_table(ranking) }}
+</section>
+{% endblock %}

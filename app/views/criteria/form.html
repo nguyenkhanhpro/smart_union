@@ -1,0 +1,15 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/form_field.html" import input, textarea, checkbox, form_actions %}
+{% block title %}{{ 'Sửa tiêu chí' if item else 'Thêm tiêu chí' }}{% endblock %}
+{% block content %}
+{{ page_header('Sửa tiêu chí' if item else 'Thêm tiêu chí') }}
+<section class="panel form-panel">
+  <form method="post" action="{{ '/criteria/' ~ item.id ~ '/edit' if item else '/criteria/new' }}" novalidate>
+    {{ input('Tên tiêu chí', 'name', values.name, required=True, error=errors.name, help='Ví dụ: Vệ sinh, Nề nếp') }}
+    {{ textarea('Mô tả', 'description', values.description, help='Nội dung được cộng/trừ điểm theo tiêu chí này.') }}
+    {% if item %}{{ checkbox('Đang áp dụng', 'is_active', values.is_active, 'Bỏ chọn để ngừng dùng cho các lượt chấm mới, điểm cũ vẫn giữ nguyên.') }}{% endif %}
+    {{ form_actions('/criteria') }}
+  </form>
+</section>
+{% endblock %}

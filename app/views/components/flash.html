@@ -1,0 +1,6 @@
+{% for item in flash %}
+<div class="alert alert-{{ 'danger' if item.category == 'error' else item.category }} alert-dismissible fade show no-print" role="alert">
+  {{ item.message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+</div>
+{% endfor %}

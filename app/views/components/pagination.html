@@ -1,0 +1,11 @@
+{% macro pagination(page, pages, qs='') %}
+{% if pages > 1 %}
+<nav class="no-print" aria-label="Phân trang">
+  <ul class="pagination pagination-sm justify-content-center mb-0">
+    <li class="page-item {{ 'disabled' if page <= 1 }}"><a class="page-link" href="?{{ qs ~ '&' if qs }}page={{ page - 1 }}">Trước</a></li>
+    <li class="page-item disabled"><span class="page-link">Trang {{ page }} / {{ pages }}</span></li>
+    <li class="page-item {{ 'disabled' if page >= pages }}"><a class="page-link" href="?{{ qs ~ '&' if qs }}page={{ page + 1 }}">Sau</a></li>
+  </ul>
+</nav>
+{% endif %}
+{% endmacro %}

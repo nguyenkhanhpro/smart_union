@@ -1,0 +1,15 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/period_filter.html" import period_filter %}
+{% from "components/ranking_table.html" import ranking_table %}
+{% block title %}Xếp hạng{% endblock %}
+{% block content %}
+{% call page_header('Xếp hạng thi đua', period.label) %}
+  {{ period_filter(period, '/rankings') }}
+  <a class="btn btn-outline-secondary btn-sm" href="/reports/export.xlsx?kind={{ period.kind }}&date={{ period.start.isoformat() }}"><i class="bi bi-file-earmark-excel"></i> Xuất Excel</a>
+{% endcall %}
+<section class="panel">
+  {{ ranking_table(ranking) }}
+</section>
+<p class="note">Đồng điểm: lớp bị trừ ít điểm hơn xếp trên; nếu vẫn bằng nhau thì đồng hạng. Mũi tên thể hiện thay đổi so với {{ {'week': 'tuần', 'month': 'tháng', 'semester': 'học kỳ'}[period.kind] }} trước.</p>
+{% endblock %}

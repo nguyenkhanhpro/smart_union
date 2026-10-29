@@ -1,0 +1,37 @@
+/* Màu lấy từ biểu tượng Đội: đỏ khăn quàng, vàng ngôi sao, nền xanh than. */
+:root {
+  --ink: #16213e;
+  --ink-2: #2b3a5e;
+  --ink-soft: #5b6784;
+  --scarf: #c8102e;
+  --star: #f5b700;
+  --canvas: #f2f4f8;
+  --surface: #ffffff;
+  --line: #dde2ea;
+  --pos: #1f7a52;
+  --pos-bg: #e3f3eb;
+  --neg: #b3122b;
+  --neg-bg: #fbe6e9;
+
+  --radius: 10px;
+  --radius-sm: 6px;
+  --font: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --bs-body-font-family: var(--font);
+  --bs-body-bg: var(--canvas);
+  --bs-body-color: var(--ink);
+  --bs-link-color: var(--ink-2);
+  --bs-link-hover-color: var(--scarf);
+  --bs-border-color: var(--line);
+}
+
+.btn-primary {
+  --bs-btn-bg: var(--ink);
+  --bs-btn-border-color: var(--ink);
+  --bs-btn-hover-bg: var(--ink-2);
+  --bs-btn-hover-border-color: var(--ink-2);
+  --bs-btn-active-bg: var(--ink-2);
+  --bs-btn-active-border-color: var(--ink-2);
+  --bs-btn-disabled-bg: var(--ink);
+  --bs-btn-disabled-border-color: var(--ink);
+}

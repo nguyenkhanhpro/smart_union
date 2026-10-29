@@ -1,0 +1,42 @@
+{% from "components/points_badge.html" import points_badge %}
+{% from "components/delete_button.html" import delete_button %}
+{% from "components/empty_state.html" import empty_state %}
+{% macro entries_table(entries, show_class=True, can_edit=False) %}
+{% if entries %}
+<div class="table-responsive">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr>
+        <th scope="col">Ngày</th>
+        {% if show_class %}<th scope="col">Lớp</th>{% endif %}
+        <th scope="col">Tiêu chí</th>
+        <th scope="col" class="text-end">Điểm</th>
+        <th scope="col">Lý do</th>
+        <th scope="col">Người nhập</th>
+        {% if can_edit %}<th scope="col" class="no-print"><span class="visually-hidden">Thao tác</span></th>{% endif %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in entries %}
+      <tr>
+        <td class="text-nowrap">{{ e.entry_date|date_vn }}</td>
+        {% if show_class %}<td><a class="class-link" href="/classes/{{ e.class_id }}">{{ e.school_class.name }}</a></td>{% endif %}
+        <td>{{ e.criterion.name }}</td>
+        <td class="text-end">{{ points_badge(e.points) }}</td>
+        <td class="reason-cell">{{ e.reason }}</td>
+        <td class="text-nowrap">{{ e.author.full_name }}<div class="cell-sub">{{ e.created_at|datetime_vn }}</div></td>
+        {% if can_edit %}
+        <td class="text-end text-nowrap no-print">
+          <a class="btn btn-sm btn-outline-secondary" href="/scores/{{ e.id }}/edit" title="Sửa"><i class="bi bi-pencil"></i><span class="visually-hidden">Sửa</span></a>
+          {{ delete_button('/scores/' ~ e.id ~ '/delete', 'Xóa lượt chấm ' ~ e.points|points ~ ' điểm của lớp ' ~ e.school_class.name ~ '? Thao tác này được ghi vào lịch sử.') }}
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+{{ empty_state('Chưa có lượt chấm nào', 'Khi có điểm cộng/trừ, chúng sẽ hiện ở đây.') }}
+{% endif %}
+{% endmacro %}

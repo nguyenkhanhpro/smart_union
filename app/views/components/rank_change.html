@@ -1,0 +1,6 @@
+{% macro rank_change(change) %}
+{% if change is none %}<span class="chg chg-none" title="Chưa có dữ liệu kỳ trước">—</span>
+{% elif change > 0 %}<span class="chg chg-up" title="Tăng {{ change }} hạng"><i class="bi bi-caret-up-fill"></i>{{ change }}</span>
+{% elif change < 0 %}<span class="chg chg-down" title="Giảm {{ change|abs }} hạng"><i class="bi bi-caret-down-fill"></i>{{ change|abs }}</span>
+{% else %}<span class="chg chg-none" title="Giữ nguyên hạng">=</span>{% endif %}
+{% endmacro %}

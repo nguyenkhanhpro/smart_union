@@ -1,0 +1,18 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/form_field.html" import input, select, checkbox, form_actions %}
+{% block title %}{{ 'Sửa tài khoản' if item else 'Thêm tài khoản' }}{% endblock %}
+{% block content %}
+{{ page_header('Sửa tài khoản ' ~ item.username if item else 'Thêm tài khoản') }}
+<section class="panel form-panel">
+  <form method="post" action="{{ '/users/' ~ item.id ~ '/edit' if item else '/users/new' }}" novalidate>
+    {% if not item %}{{ input('Tên đăng nhập', 'username', values.username, required=True, error=errors.username, attrs='autocomplete="off"') }}{% endif %}
+    {{ input('Họ tên', 'full_name', values.full_name, required=True, error=errors.full_name) }}
+    {{ select('Vai trò', 'role', roles, values.role, required=True, error=errors.role) }}
+    {{ input('Mật khẩu mới' if item else 'Mật khẩu', 'password', '', 'password', required=not item, error=errors.password,
+             help='Để trống nếu không đổi mật khẩu.' if item else 'Tối thiểu 6 ký tự.', attrs='autocomplete="new-password"') }}
+    {% if item %}{{ checkbox('Đang hoạt động', 'is_active', values.is_active, 'Bỏ chọn để khóa tài khoản, không cho đăng nhập.') }}{% endif %}
+    {{ form_actions('/users') }}
+  </form>
+</section>
+{% endblock %}

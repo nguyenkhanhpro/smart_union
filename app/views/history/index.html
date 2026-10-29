@@ -1,0 +1,32 @@
+{% extends "layouts/app.html" %}
+{% from "components/page_header.html" import page_header %}
+{% from "components/pagination.html" import pagination %}
+{% from "components/empty_state.html" import empty_state %}
+{% from "components/points_badge.html" import points_badge %}
+{% block title %}Lịch sử thay đổi{% endblock %}
+{% block content %}
+{{ page_header('Lịch sử thay đổi điểm', 'Mọi thao tác thêm, sửa, xóa đều được lưu lại để bảo đảm minh bạch') }}
+<section class="panel">
+  {% if rows %}
+  <div class="table-responsive">
+    <table class="table align-middle mb-0">
+      <thead><tr><th scope="col">Thời gian</th><th scope="col">Người thực hiện</th><th scope="col">Thao tác</th><th scope="col">Nội dung trước</th><th scope="col">Nội dung sau</th></tr></thead>
+      <tbody>
+        {% for h in rows %}
+                <tr>
+          <td class="text-nowrap">{{ h.changed_at|datetime_vn }}</td>
+          <td>{{ h.user.full_name }}</td>
+          <td><span class="badge {{ {'create': 'text-bg-success-subtle', 'update': 'text-bg-warning-subtle', 'delete': 'text-bg-danger-subtle'}[h.action] }}">{{ h.action_label }}</span></td>
+          <td class="reason-cell">{% if h.old %}Lớp {{ h.old.class }}, {{ h.old.criterion }}, {{ h.old.points|points }}, {{ h.old.reason }} ({{ h.old.date }}){% else %}—{% endif %}</td>
+          <td class="reason-cell">{% if h.new %}Lớp {{ h.new.class }}, {{ h.new.criterion }}, {{ h.new.points|points }}, {{ h.new.reason }} ({{ h.new.date }}){% else %}—{% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-foot">{{ pagination(page, pages, qs) }}</div>
+  {% else %}
+  {{ empty_state('Chưa có thay đổi nào', 'Lịch sử sẽ xuất hiện khi có người nhập, sửa hoặc xóa điểm.') }}
+  {% endif %}
+</section>
+{% endblock %}
